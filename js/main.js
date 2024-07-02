@@ -129,6 +129,12 @@ const wine = (stock) => {
 const subscription = () => {
     let nombre = prompt('Ingrese su nombre y apellido');
 
+    while (nombre == '') {
+        alert('Error - Ingrese nombre y apellido');
+
+        nombre = prompt('Ingrese su nombre y apellido');
+    }
+
     let edad = parseInt(prompt('Ingrese su edad'));
 
     while (isNaN(edad) || edad < 18) {
