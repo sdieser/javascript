@@ -1,0 +1,63 @@
+.nav {
+  background-color: black;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+nav {
+  background-color: #f2f2f2;
+}
+
+nav ul {
+  position: absolute;
+  width: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.nav_padding {
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+h1 {
+  text-align: center;
+  padding: 15px;
+  font-size: 1.5rem;
+}
+
+.wineStock {
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.card {
+  width: 14rem;
+}
+
+.imgCart {
+  height: 20%;
+  width: 20%;
+  border: 1px #f0f0f0 solid;
+  border-radius: 5px;
+}
+
+.list-group {
+  border-radius: 0px;
+}
+
+.social {
+  background-color: transparent;
+}
+
+.bi-instagram {
+  color: grey;
+}

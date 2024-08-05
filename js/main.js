@@ -1,265 +1,187 @@
-const member = [];
-const wine = [];
-const shop = [];
-
-class memberData {
-    constructor (name, surname, age, email, phone){
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-        this.email = email;
-        this.phone = phone;
-    }
-}
-
-class wineData {
-    constructor (id, name, price, stock) {
+class WineData {
+    constructor(id, name, varietal, price) {
         this.id = id;
         this.name = name;
+        this.varietal = varietal;
+        this.price = price
+    }
+};
+
+class WineCart {
+    constructor(id, name, varietal, price, total) {
+        this.id = id;
+        this.name = name;
+        this.varietal = varietal;
         this.price = price;
-        this.stock = stock;
+        this.total = total
     }
-}
+};
 
-const optionControl = (option, min, max) => {
-    if (isNaN(option)) {
-        alert('Error - Ingrese un número');
-    } 
-    else if (option <= min || option > max) {
-        alert('Error - Opción no disponible');
+const wineStock = [{
+    id: 'v1',
+    name: 'Durigutti',
+    varietal: 'Cabernet Franc',
+    price: 14035
+},
+{
+    id: 'v2',
+    name: 'Punto Final',
+    varietal: 'Malbec',
+    price: 10177
+},
+{
+    id: 'v3',
+    name: 'El Enemigo',
+    varietal: 'Cabernet Sauvignon',
+    price: 10366
+},
+{
+    id: 'v4',
+    name: 'Dedicado',
+    varietal: 'Cabernet Sauvignon',
+    price: 19120
+},
+{
+    id: 'v5',
+    name: 'Riglos',
+    varietal: 'Cabernet Sauvignon',
+    price: 14692
+},
+{
+    id: 'v6',
+    name: 'El Enemigo',
+    varietal: 'Malbec',
+    price: 15024
+},
+{
+    id: 'v7',
+    name: 'Durigutti',
+    varietal: 'Cabernet Sauvignon',
+    price: 17866
+},
+{
+    id: 'v8',
+    name: 'El Enemigo',
+    varietal: 'Cabernet Franc',
+    price: 13556
+},
+{
+    id: 'v9',
+    name: 'Punto Final',
+    varietal: 'Cabernet Sauvignon',
+    price: 19549
+},
+{
+    id: 'v10',
+    name: 'Punto Final',
+    varietal: 'Cabernet Franc',
+    price: 12027
+},
+{
+    id: 'v11',
+    name: 'Riglos',
+    varietal: 'Malbec',
+    price: 16195
+},
+{
+    id: 'v12',
+    name: 'Dedicado',
+    varietal: 'Malbec',
+    price: 16679
+},
+{
+    id: 'v13',
+    name: 'Riglos',
+    varietal: 'Cabernet Franc',
+    price: 14800
+},
+{
+    id: 'v14',
+    name: 'Durigutti',
+    varietal: 'Malbec',
+    price: 18647
+},
+{
+    id: 'v15',
+    name: 'Piedra Negra',
+    varietal: 'Chardonnay',
+    price: 15426
+}];
+
+const formatter = new Intl.NumberFormat('es-AR');
+const stockSection = document.querySelector('.wineStock');
+const cartSection = document.querySelector('.wineCart');
+const searchSection = document.querySelector('form');
+let shop = JSON.parse(localStorage.getItem('cart')) || [];
+
+searchSection.onsubmit = (e) => {
+    e.preventDefault();
+    let inputName = searchSection[0].value;
+    const find = wineStock.filter((e) => e.name.toLowerCase().includes(inputName.toLowerCase()));
+    if (find.length > 0) {
+        let card = stockSection.querySelectorAll('.card');
+        for (const c of card) {
+            c.remove()
+        }
+        wines(find)
+    } else {
+        const toastNotFound = stockSection.querySelector('#liveToast');
+        const toast = bootstrap.Toast.getOrCreateInstance(toastNotFound);
+        toast.show()
     }
-}
+};
 
-const toStringWine = (array) => {
-    let store = '';
-    let count = -1;
-    array.forEach((object) => {
-        count += 1;
-        store += `[${count}] ${object.name} - $ ${object.price} - Cantidad: ${object.stock}\n`;
-    })
-    return store;
-}
+const accumulator = (array) => {
+    let wineTotal = array.reduce((acc, e) => acc + e.total, 0);
+    let priceTotal = array.reduce((acc, e) => (acc + e.price) * e.total, 0);
+    document.querySelector('.cartIndicator').innerText = wineTotal;
+    let wineID = document.querySelector('#total');
+    priceTotal > 0 ? wineID.classList.add('fw-bold') : wineID.classList.remove('fw-bold');
+    priceTotal > 0 ? wineID.innerText = `$ ${formatter.format(priceTotal)}` : wineID.innerText = 'El carrito esta vacio'
+};
 
-const toStringShop = (array) => {
-    let shop = '';
-    array.forEach((object) => {
-        shop += `${object.name} - $ ${object.price} - Cantidad: ${object.stock}\n`;
-    })
-    const total = array.reduce((acc, array) => acc + (array.price * array.stock), 0);
-    shop += `\n• Total: $ ${total}`;
-    return shop;
-}
-
-const toStringSearch = (array) => {
-    let memberResult = '';
-    array.forEach((object) => {
-        memberResult += `${object.name} ${object.surname} - ${object.email} - ${object.phone}\n`;
-    })
-    return memberResult;
-}
-
-const menu = () => {
-    let mainOption = 0;
-    while (mainOption !== 3) {
-        mainOption = parseInt(prompt('MENÚ PRINCIPAL - Ingrese una opción:\n\n[1] Catálogo de vinos\n[2] Socios\n\n[3] Salir'));
-        optionControl(mainOption, 0, 3);
-        if (mainOption === 1) {
-            catalogo();
-        }
-        else if (mainOption === 2) {
-            let memberOption = 0;
-            while (memberOption !== 3) {
-                memberOption = parseInt(prompt('SOCIOS - Ingrese una opción:\n\n[1] Agregar socio\n[2] Buscar socio\n\n[3] Salir'));
-                optionControl(memberOption, 0, 3);
-                if (memberOption === 1) {
-                    memberAdd();
-                }
-                else if (memberOption === 2) {
-                    memberSearch();
-                    
-                }
-                else if (memberOption === 3) {
-                    menu();
-                }
-            }
-        }
-        else if (mainOption === 3) {
-            alert('¡Gracias por visitar Wine Store!');
-        }
+const cart = (w) => {
+    const cartSection = document.querySelector('.wineCart');
+    let templateList = document.querySelector('.wineItem').content.cloneNode(true);
+    templateList.querySelector('li').id = w.id;
+    templateList.querySelector('.title').innerText = w.name;
+    templateList.querySelector('.varietal').innerText = w.varietal;
+    templateList.querySelector('.price').innerText += formatter.format(w.price);
+    w.total == undefined ? templateList.querySelector('.badge').innerText = 1 : templateList.querySelector('.badge').innerText = w.total;
+    templateList.querySelector('.btn').onclick = () => {
+        let cartIndex = shop.findIndex((e) => e.id === w.id);
+        cartSection.querySelector(`#${w.id}`).remove();
+        shop.splice(cartIndex, 1);
+        accumulator(shop);
+        localStorage.setItem('cart', JSON.stringify(shop))
     }
-}
+    cartSection.appendChild(templateList)
+};
 
-const catalogo = () => {
-    let catalogoOption = 0;
-    while (catalogoOption !== 4) {
-        catalogoOption = parseInt(prompt('CATÁLOGO DE VINOS - Ingrese una opción:\n\n[1] Ver todos los vinos\n[2] Ver carrito\n[3] Vaciar carrito\n\n[4] Volver al menú'));
-        optionControl(catalogoOption, 0, 4);
-        if (catalogoOption === 1) {
-            let wineOption = 0;
-            while (wineOption !== wine.length) {
-                let wineString = toStringWine(wine);
-                wineOption = parseInt(prompt(`Seleccione sus vinos:\n\n${wineString}\n[${wine.length}] Salir`));
-                optionControl(wineOption, -1, wine.length);
-                if (wineOption >= 0 && wineOption < wine.length) {
-                    stockControl(wineOption);
-                }
-            }
-        }
-        else if (catalogoOption === 2) {
-            if (shop.length === 0) {
-                alert('No hay productos en el carrito.');
+const wines = (array) => {
+    array.forEach((w) => {
+        let templateCard = document.querySelector('.wineCard').content.cloneNode(true);
+        templateCard.querySelector('h5').innerText = w.name;
+        templateCard.querySelector('h6').innerText = w.varietal;
+        templateCard.querySelector('p').innerText += formatter.format(w.price);
+        templateCard.querySelector('button').onclick = () => {
+            let cartIndex = shop.findIndex((e) => e.id === w.id);
+            if (cartIndex === -1) {
+                shop.push(new WineCart(w.id, w.name, w.varietal, w.price, 1));
+                cart(w)
             }
             else {
-                alert(toStringShop(shop));
+                shop[cartIndex].total += 1;
+                let refreshAccumulator = document.querySelector(`#${w.id}`);
+                refreshAccumulator.querySelector('.badge').innerText = shop[cartIndex].total
             }
+            accumulator(shop);
+            localStorage.setItem('cart', JSON.stringify(shop))
         }
-        else if (catalogoOption === 3) {
-            deleteStock();
-            alert('Se han eliminado los productos');
-        }
-        else if (catalogoOption === 4) {
-            menu();
-        }
-    }
-}
+        stockSection.append(templateCard)
+    })
+};
 
-const stockControl = (num) => {
-    if (wine[num].stock === 0) {
-        alert('Error - No hay disponibilidad');
-    }
-    else if (wine[num].stock > 0) {
-        const index = shop.findIndex((element) => element.name === wine[num].name);
-        if (index === -1) {
-            shop.push(new wineData(wine[num].id, wine[num].name, wine[num].price, 1));
-        }
-        else {
-            shop[index].stock += 1;
-        } 
-        wine[num].stock -= 1;
-    }
-}
-
-const deleteStock = () => {
-    for (const each of shop) {
-        const index = wine.findIndex((element) => element.id === each.id);
-        wine[index].stock += each.stock;
-    }
-    shop.splice(0);
-}
-
-const memberAdd = () => {
-    let name = prompt('Nombre');
-    while (name == '') {
-        alert('Error - ingrese nombre');
-        name = prompt('Nombre');
-    }
-    let surname = prompt('Apellido');
-    while (surname == '') {
-        alert('Error - ingrese apellido');
-        surname = prompt('Apellido');
-    }
-    let age = parseInt(prompt('Edad'));
-    while (isNaN(age) || age < 18) {
-        if (isNaN(age)) {
-            alert('Error - Ingrese un número');
-        }
-        else if (age < 18) {
-            alert('Debe ser mayor de 18 años');
-        }
-        age = parseInt(prompt('Edad'));
-    }
-    let email = prompt('Correo electrónico');
-    email = email.toLowerCase();
-    let emailAt = email.includes('@');
-    let emailDomain = email.includes('.com')
-    while (email == '' || emailAt == false || emailDomain == false) {
-        alert('Error - ingrese correo electrónico');
-        email = prompt('Correo electrónico');
-        email = email.toLowerCase();
-        emailAt = email.includes('@');
-        emailDomain = email.includes('.com');
-    }
-    let phone = parseInt(prompt('Teléfono'));
-    while (phone == '' || isNaN(phone)) {
-        if (isNaN(phone)) {
-            alert('Error - Ingrese un número');
-        }
-        phone = parseInt(prompt('Teléfono'));
-    }
-    alert(`Socio agregado:\n\n• Nombre: ${name} ${surname}\n• Edad: ${age}\n• Correo electrónico: ${email}\n• Teléfono: ${phone}`)
-    return member.push(new memberData(name, surname, age, email, phone));
-}
-
-const memberSearch = () => {
-    let searchOption = 0;
-    while (searchOption !== 5) {
-        searchOption = parseInt(prompt('BUSCAR SOCIO - Ingrese una opción:\n\n[1] Buscar por nombre\n[2] Buscar por apellido\n[3] Buscar por correo electrónico\n[4] Buscar por teléfono\n\n[5] Volver al menú'));
-        optionControl(searchOption, 0, 5);
-        if (searchOption === 1) {
-            let search = prompt('Ingrese el nombre');
-            const result = member.filter((element) => element.name.toLowerCase().includes(search.toLowerCase()));
-            if (result.length > 0) {
-                alert(toStringSearch(result));
-            }
-            else if (result.length === 0) {
-                alert('No se encontraron resultados');
-            }
-        }
-        else if (searchOption === 2) {
-            let search = prompt('Ingrese el apellido');
-            const result = member.filter((element) => element.surname.toLowerCase().includes(search.toLowerCase()));
-            if (result.length > 0) {
-                alert(toStringSearch(result));
-            }
-            else if (result.length === 0) {
-                alert('No se encontraron resultados');
-            }
-        }
-        else if (searchOption === 3) {
-            let search = prompt('Ingrese el correo electrónico');
-            const result = member.filter((element) => element.email.toLowerCase().includes(search.toLowerCase()));
-            if (result.length > 0) {
-                alert(toStringSearch(result));
-            }
-            else if (result.length === 0) {
-                alert('No se encontraron resultados');
-            }
-        }
-        else if (searchOption === 4) {
-            let search = parseInt(prompt('Ingrese el teléfono'));
-            const result = member.filter((element) => element.phone = search);
-            if (result.length > 0) {
-                alert(toStringSearch(result));
-            }
-            else if (result.length === 0) {
-                alert('No se encontraron resultados');
-            }
-        }
-        else if (searchOption === 5) {
-            menu();
-        }
-    }
-}
-
-const randomWine = (array) => {
-    let name = ['El Enemigo', 'Riglos', 'Durigutti', 'Punto Final', 'Dedicado'];
-    let type = ['Malbec', 'Cabernet Franc','Cabernet Sauvignon'];
-    for (let i = 0; i < 50; i++) {
-        let id = array.length + 1;
-        let n = Math.round(Math.random() * 4);
-        let t = Math.round(Math.random() * 2);
-        let price = Math.ceil(Math.random() * 10000 + 10000);
-        let wineName = name[n] + ' - ' + type[t];
-        const index = array.findIndex((element) => element.name === wineName);
-        if (index === -1) {
-            array.push(new wineData(id, wineName, price, 1));
-        }
-        else {
-            array[index].stock += 1;
-        }
-    }
-}
-
-randomWine(wine);
-
-menu();
+shop !== null && shop.forEach((e) => { cart(e) });
+wines(wineStock);
+accumulator(shop);
