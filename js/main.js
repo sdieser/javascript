@@ -113,6 +113,7 @@ const stockSection = document.querySelector('.wineStock');
 const cartSection = document.querySelector('.wineCart');
 const searchSection = document.querySelector('form');
 let shop = JSON.parse(localStorage.getItem('cart')) || [];
+shop !== null && shop.forEach((e) => { cart(e) });
 
 searchSection.onsubmit = (e) => {
     e.preventDefault();
@@ -140,7 +141,7 @@ const accumulator = (array) => {
     priceTotal > 0 ? wineID.innerText = `$ ${formatter.format(priceTotal)}` : wineID.innerText = 'El carrito esta vacio'
 };
 
-const cart = (w) => {
+function cart(w) {
     const cartSection = document.querySelector('.wineCart');
     let templateList = document.querySelector('.wineItem').content.cloneNode(true);
     templateList.querySelector('li').id = w.id;
@@ -182,6 +183,5 @@ const wines = (array) => {
     })
 };
 
-shop !== null && shop.forEach((e) => { cart(e) });
 wines(wineStock);
 accumulator(shop);
