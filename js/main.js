@@ -116,6 +116,6 @@ function accumulator(array) {
     let priceTotal = array.reduce((acc, e) => acc + (e.price * e.total), 0);
     document.querySelector('.cartIndicator').innerText = wineTotal;
     let badgeTotal = document.querySelector('#total');
-    priceTotal > 0 ? badgeTotal.classList.add('fw-bold') : wineID.classList.remove('fw-bold');
-    priceTotal > 0 ? badgeTotal.innerText = `Total $ ${formatter.format(priceTotal)}` : wineID.innerText = 'El carrito esta vacio'
+    priceTotal > 0 ? badgeTotal.classList.add('fw-bold') : badgeTotal.classList.remove('fw-bold');
+    priceTotal > 0 ? badgeTotal.innerText = `Total $ ${formatter.format(priceTotal)}` : badgeTotal.innerText = 'El carrito esta vacio'
 };
