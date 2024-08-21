@@ -1,0 +1,25 @@
+.nav_padding {
+    min-height: 100vh;
+    padding-top: 70px;
+}
+
+.index {
+    .border-light {
+        --bs-border-opacity: 0.3;
+    }
+
+    .bg-custom {
+        background: rgba($color: $dark-grey, $alpha: 0.2) !important;
+        transition: all 0.7s;
+    }
+
+    .bg-custom-scroll {
+        background: rgba($color: $dark-grey, $alpha: 1) !important;
+    }
+}
+
+.buy {
+    .bg-custom {
+        background: rgba($color: $dark-grey, $alpha: 1) !important;
+    }
+}

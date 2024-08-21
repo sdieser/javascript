@@ -1,63 +1,531 @@
-.nav {
-  background-color: black;
+@import "variables";
+@import "font";
+@import "reset";
+@import "nav";
+@import "footer";
+@import "components";
+
+.index {
+  background: radial-gradient(circle at 10% 20%, rgb(87, 108, 117) 0%, rgb(37, 50, 55) 100.2%);
+
+  .hero {
+    height: 110vh;
+    background-image: url(../images/wallpaper.png);
+    background-size: cover;
+    display: flex;
+
+    .title {
+      width: 60vw;
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+
+      h1 {
+        font-family: "Syne Mono", monospace;
+        font-weight: 500;
+        font-style: normal;
+        font-size: 5rem;
+        color: $white;
+      }
+    }
+
+    .social {
+      width: 40vw;
+      height: 100vh;
+      display: flex;
+      align-items: end;
+
+      .wrapper {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        list-style: none;
+        height: 120px;
+        width: 100%;
+        padding-top: 40px;
+        font-family: "Poppins", sans-serif;
+
+        .icon {
+          position: relative;
+          background: $white;
+          border-radius: 50%;
+          margin: 10px;
+          width: 50px;
+          height: 50px;
+          font-size: 18px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+          a i {
+            color: $dark-grey;
+          }
+
+          &:hover {
+            .tooltip {
+              top: -45px;
+              opacity: 1;
+              visibility: visible;
+              pointer-events: auto;
+            }
+
+            a i {
+              color: $white;
+            }
+          }
+        }
+
+        .tooltip {
+          position: absolute;
+          top: 0;
+          font-size: 14px;
+          background: $white;
+          color: $white;
+          padding: 5px 8px;
+          border-radius: 5px;
+          box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+          opacity: 0;
+          pointer-events: none;
+          transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+          &::before {
+            position: absolute;
+            content: "";
+            height: 8px;
+            width: 8px;
+            background: $white;
+            bottom: -3px;
+            left: 50%;
+            transform: translate(-50%) rotate(45deg);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          }
+        }
+
+        .icon:hover .wrapper .icon:hover span,
+        .icon:hover .tooltip {
+          text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .instagram:hover,
+        .instagram:hover .tooltip,
+        .instagram:hover .tooltip::before {
+          background: #e4405f;
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .card-welcome {
+    margin: auto;
+    position: relative;
+    width: 70vw;
+    height: 30vh;
+    overflow: hidden;
+    border: 1px solid $white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    .card-title,
+    .card-description {
+      color: $white;
+    }
+
+    &:hover {
+      border: 0px solid rgba(52, 73, 94, 0.7);
+      transform: scale(1.1);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+
+      .card-title,
+      .card-description {
+        color: $dark-grey;
+      }
+
+      .background-overlay {
+        opacity: 1;
+      }
+    }
+
+    .card-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #888;
+      z-index: 2;
+      transition: color 0.3s;
+    }
+
+    .background-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: $white;
+      /**/
+      border-radius: 15px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card-description {
+      font-size: 16px;
+    }
+  }
+
+  .wineStock {
+    padding-top: 15px;
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+
+    .card {
+      width: 14rem;
+      align-items: center;
+
+      .wineBottle {
+        position: absolute;
+        transition: opacity 0.8s;
+
+        &:hover {
+          transition: opacity 0.6s;
+          opacity: 0;
+        }
+      }
+    }
+
+    .button {
+      --main-focus: #2d8cf0;
+      --font-color: #323232;
+      --bg-color-sub: #dedede;
+      --bg-color: #eee;
+      --main-color: #323232;
+      position: relative;
+      width: 150px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--main-color);
+      box-shadow: 4px 4px var(--main-color);
+      background-color: var(--bg-color);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: all 0.3s;
+
+      .button__text {
+        transform: translateX(22px);
+        color: var(--font-color);
+        font-weight: 600;
+      }
+
+      .button__icon {
+        position: absolute;
+        transform: translateX(109px);
+        height: 100%;
+        width: 39px;
+        background-color: var(--bg-color-sub);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .svg {
+        width: 20px;
+        fill: var(--main-color);
+      }
+
+      &:hover {
+        background: var(--bg-color);
+
+        .button__text {
+          color: transparent;
+          transition: all 0.3s;
+        }
+
+        .button__icon {
+          width: 148px;
+          transform: translateX(0);
+          transition: all 0.3s;
+        }
+
+        &:active {
+          transform: translate(3px, 3px);
+          box-shadow: 0px 0px var(--main-color);
+        }
+      }
+    }
+  }
+
+  .offcanvas {
+    background-color: $white;
+
+    .list-group-item {
+      border-color: $light-grey;
+    }
+
+    li {
+      background-color: $white;
+    }
+
+    .imgCart {
+      height: 20%;
+      width: 20%;
+      border: 1px $white solid;
+      border-radius: 5px;
+    }
+
+    .buy {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgb(15, 15, 15);
+      border: none;
+      color: white;
+      font-weight: 600;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.103);
+      position: relative;
+      overflow: hidden;
+      transition-duration: .3s;
+
+      .svgIcon {
+        width: 16px;
+      }
+
+      .svgIcon path {
+        fill: white;
+      }
+
+      &::before {
+        width: calc(100% + 40px);
+        aspect-ratio: 1/1;
+        position: absolute;
+        content: "";
+        background-color: white;
+        border-radius: 50%;
+        left: -20px;
+        top: 50%;
+        transform: translate(-150%, -50%);
+        transition-duration: .5s;
+        mix-blend-mode: difference;
+      }
+
+      &:hover::before {
+        transform: translate(0, -50%);
+      }
+
+      &:active {
+        transform: translateY(4px);
+        transition-duration: .3s;
+      }
+    }
+  }
+
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+.buy {
+  background-color: $white;
 
-nav {
-  background-color: #f2f2f2;
-}
+  .commerce {
+    display: flex;
+    height: 90vh;
+    width: auto;
 
-nav ul {
-  position: absolute;
-  width: auto;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
+    .left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      width: 50vw;
+      padding: 30px;
 
-.nav_padding {
-  min-height: 100vh;
-  padding-top: 80px;
-}
+      .creditCard {
+        margin-bottom: 15px;
 
-h1 {
-  text-align: center;
-  padding: 15px;
-  font-size: 1.5rem;
-}
+        .flip-card {
+          background-color: transparent;
+          width: 240px;
+          height: 154px;
+          perspective: 1000px;
+          color: white;
+        }
 
-.wineStock {
-  padding: 15px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 40px;
-}
+        .heading {
+          position: absolute;
+          letter-spacing: .2em;
+          font-size: 0.5em;
+          top: 1.8em;
+          left: 15em;
+        }
 
-.card {
-  width: 14rem;
-}
+        .logo {
+          position: absolute;
+          top: 6.8em;
+          left: 11.7em;
+        }
 
-.imgCart {
-  height: 20%;
-  width: 20%;
-  border: 1px #f0f0f0 solid;
-  border-radius: 5px;
-}
+        .chip {
+          position: absolute;
+          top: 2.3em;
+          left: 1.5em;
+        }
 
-.list-group {
-  border-radius: 0px;
-}
+        .contactless {
+          position: absolute;
+          top: 3.5em;
+          left: 12.4em;
+        }
 
-.social {
-  background-color: transparent;
-}
+        .number {
+          position: absolute;
+          font-weight: bold;
+          font-size: .8em;
+          top: 6.3em;
+          left: 1.3em;
+        }
 
-.bi-instagram {
-  color: grey;
+        .date {
+          position: absolute;
+          font-weight: bold;
+          font-size: 0.6em;
+          top: 10.9em;
+          left: 3.2em;
+        }
+
+        .name {
+          position: absolute;
+          font-weight: bold;
+          font-size: 0.6em;
+          top: 13.1em;
+          left: 2em;
+        }
+
+        .strip {
+          position: absolute;
+          background-color: black;
+          width: 15em;
+          height: 1.5em;
+          top: 2.4em;
+          background: repeating-linear-gradient(45deg,
+              #303030,
+              #303030 10px,
+              #202020 10px,
+              #202020 20px);
+        }
+
+        .mstrip {
+          position: absolute;
+          background-color: rgb(255, 255, 255);
+          width: 8em;
+          height: 1.4em;
+          top: 5em;
+          left: .8em;
+          border-radius: 2.5px;
+        }
+
+        .sstrip {
+          position: absolute;
+          background-color: rgb(255, 255, 255);
+          width: 4.1em;
+          height: 1.4em;
+          top: 5em;
+          left: 10em;
+          border-radius: 2.5px;
+        }
+
+        .code {
+          font-weight: bold;
+          font-size: 0.9rem;
+          text-align: center;
+          color: black;
+        }
+
+        .flip-card-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          transition: transform 0.8s;
+          transform-style: preserve-3d;
+        }
+
+        .flip {
+          transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+          box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+          position: absolute;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+          border-radius: 1rem;
+        }
+
+        .flip-card-front {
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+          background-color: $dark-grey;
+        }
+
+        .flip-card-back {
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+          background-color: $dark-grey;
+          transform: rotateY(180deg);
+        }
+      }
+    }
+
+    .right {
+      width: 50vw;
+      overflow: auto;
+      padding: 40px;
+
+
+      .list-group-item {
+
+        border-color: $light-grey;
+      }
+
+      li {
+        width: 40vw;
+        margin: auto;
+        background-color: $white;
+      }
+
+      .imgCart {
+        height: 10%;
+        width: 10%;
+        border: 1px $white solid;
+        border-radius: 5px;
+      }
+    }
+  }
+
+
 }
